@@ -4,6 +4,55 @@
     <meta charset="UTF-8">
     <title>About Me</title>
     <link rel="stylesheet" href="styles/main.css">
+    <style>
+        .music-hud {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(20, 24, 40, 0.95);
+            color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            padding: 0.8em 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            z-index: 1000;
+            font-size: 1rem;
+            user-select: none;
+        }
+        .music-hud .hud-btn {
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 1.3em;
+            cursor: pointer;
+            margin: 0 0.3em;
+            transition: color 0.2s;
+        }
+        .music-hud .hud-btn:hover {
+            color: #fff;
+        }
+        .music-hud .song-title {
+            min-width: 120px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1em;
+            color: #ffd700;
+        }
+        .music-hud .mute-btn {
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-left: 0.5em;
+            transition: color 0.2s;
+        }
+        .music-hud .mute-btn:hover {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -16,6 +65,7 @@
         <p class="about-me">Welcome to my personal website! I'm a beginner scripter/coder hoping to get better.</p>
         <p class="about-me">I enjoy learning new things and creating cool projects with code.</p>
         <p class="about-me">I originate from Texas and enjoy many things, some of which include coding, math, reading, and more!</p>
+        <div id="view-counter" style="color:#888; margin-bottom:1em;"></div>
         <div class="button-group">
             <a href="https://github.com/liptonize" class="custom-btn" target="_blank">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="btn-icon">
@@ -34,10 +84,17 @@
                 Copy Cash App
             </button>
         </div>
+        <audio id="music-player" autoplay loop style="display:none;"></audio>
     </main>
+    <div class="music-hud">
+        <button class="hud-btn" id="prev-song" title="Previous Song">&lt;</button>
+        <span class="song-title" id="song-title">Song Name</span>
+        <button class="hud-btn" id="next-song" title="Next Song">&gt;</button>
+        <button class="mute-btn" id="mute-btn" title="Mute/Unmute">&#128266;</button>
+    </div>
     <script>
+        // Cash App copy
         function copyCashTag() {
-            // Replace with your actual Cash App tag or link
             const cashTag = "$chapeme";
             navigator.clipboard.writeText(cashTag).then(function() {
                 alert("Cash App tag copied: " + cashTag);
@@ -45,6 +102,66 @@
                 alert("Failed to copy Cash App tag.");
             });
         }
+
+        // View counter (local, per browser)
+        const counterKey = "liptonize-views";
+        let views = Number(localStorage.getItem(counterKey) || 0) + 1;
+        localStorage.setItem(counterKey, views);
+        document.getElementById("view-counter").textContent = `Views (on this device): ${views}`;
+
+        // Music player with shuffle and HUD
+        const musicList = [
+            "music/Machine Love.mp3",
+            "music/Nope your too late i already died.mp3",
+            "music/The Neighbourhood - Sweater Weather (Lyrics).mp3"
+            // Add more songs here
+        ];
+
+        // Shuffle the musicList array
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        shuffle(musicList);
+
+        let currentSong = 0;
+
+        const player = document.getElementById("music-player");
+        const songTitle = document.getElementById("song-title");
+        const muteBtn = document.getElementById("mute-btn");
+
+        function getSongName(path) {
+            return path.split('/').pop().replace(/\.[^/.]+$/, '').replace(/_/g, ' ');
+        }
+
+        function loadSong(index) {
+            player.src = musicList[index];
+            songTitle.textContent = getSongName(musicList[index]);
+            player.play();
+            muteBtn.innerHTML = player.muted ? "&#128263;" : "&#128266;";
+        }
+
+        document.getElementById("prev-song").onclick = function() {
+            currentSong = (currentSong - 1 + musicList.length) % musicList.length;
+            loadSong(currentSong);
+        };
+        document.getElementById("next-song").onclick = function() {
+            currentSong = (currentSong + 1) % musicList.length;
+            loadSong(currentSong);
+        };
+        muteBtn.onclick = function() {
+            player.muted = !player.muted;
+            muteBtn.innerHTML = player.muted ? "&#128263;" : "&#128266;";
+        };
+        player.onended = function() {
+            currentSong = (currentSong + 1) % musicList.length;
+            loadSong(currentSong);
+        };
+
+        // Initial load
+        loadSong(currentSong);
     </script>
     <script src="scripts/main.js"></script>
 </body>
