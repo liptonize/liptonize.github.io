@@ -1,0 +1,77 @@
+body {
+    background: linear-gradient(to bottom, #0a1026, #05060a);
+    color: #bbb;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+header, main {
+    width: 100%;
+    text-align: center;
+}
+header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #bbb;
+    margin-bottom: 0.5em;
+}
+.about-me {
+    font-size: 1rem;
+    font-style: italic;
+    color: #888;
+    margin-top: 0.5em;
+}
+.custom-separator {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+}
+.fancy-divider {
+    color: #fff;
+    font-size: 2.5rem;
+    font-family: 'Segoe Script', 'Brush Script MT', cursive, sans-serif;
+    letter-spacing: 0.1em;
+    user-select: none;
+}
+.button-group {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+.custom-btn {
+    background: #1a2233;
+    color: #fff;
+    border: none;
+    padding: 0.7em 1.5em;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+.custom-btn:hover {
+    background: #293759;
+    color: #ffd700;
+    transform: translateY(-2px) scale(1.05);
+}
+.btn-icon {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    margin-right: 0.5em;
+}
+/* Only apply the filter to SVGs so PNGs display correctly */
+.btn-icon[src$=".svg"] {
+    filter: brightness(0) invert(1);
+}
